@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\DashboardController;
+
 
 // Splash screen (landing page)
 Route::get('/', [AdminAuthController::class, 'splash'])->name('splash');
@@ -19,3 +21,8 @@ Route::middleware('admin.auth')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 });
+
+//Dashboard
+Route::get('/', fn () => redirect()->route('dashboard'));
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
