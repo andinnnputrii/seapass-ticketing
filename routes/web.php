@@ -17,12 +17,11 @@ Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 // Admin Dashboard (protected)
 Route::middleware('admin.auth')->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
 });
 
-//Dashboard
-Route::get('/', fn () => redirect()->route('dashboard'));
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+
+
 

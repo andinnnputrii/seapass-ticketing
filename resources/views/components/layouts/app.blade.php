@@ -51,7 +51,7 @@
 
       @php
         $items = $menuItems ?? [
-          ['label'=>'Dashboard','icon'=>'grid','route'=>route('dashboard')],
+          ['label'=>'Dashboard','icon'=>'grid','route'=>route('admin.dashboard')],
           ['label'=>'Kapal & Operator','icon'=>'anchor','route'=>'#'],
           ['label'=>'Jadwal Kapal','icon'=>'calendar','route'=>'#'],
           ['label'=>'Tiket & Validasi','icon'=>'ticket','route'=>'#'],
@@ -99,7 +99,7 @@
           </select>
           <button class="p-2 rounded-md hover:bg-brand-700" aria-label="Notifikasi"><i data-feather="bell"></i></button>
           <div class="flex items-center gap-2">
-            <span class="text-sm opacity-90">Brodie</span>
+            <span class="text-sm opacity-90">{{session('admin_username')}}</span>
             <div class="w-8 h-8 rounded-full bg-white/20 grid place-items-center">OP</div>
           </div>
         </div>

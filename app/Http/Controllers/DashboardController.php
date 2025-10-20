@@ -56,7 +56,7 @@ class DashboardController extends Controller
 
         // Menu items dipakai oleh layout
         $menuItems = [
-            ['label'=>'Dashboard','icon'=>'grid','route'=>route('dashboard')],
+            ['label'=>'Dashboard','icon'=>'grid','route'=>route('admin.dashboard')],
             ['label'=>'Kapal & Operator','icon'=>'anchor','route'=>'#'],
             ['label'=>'Jadwal Kapal','icon'=>'calendar','route'=>'#'],
             ['label'=>'Tiket & Validasi','icon'=>'ticket','route'=>'#'],
