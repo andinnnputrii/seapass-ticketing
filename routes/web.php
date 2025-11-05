@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KapalOperatorController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\JadwalKapalController;
 use App\Http\Controllers\TiketValidasiController;
+use App\Http\Controllers\Auth\AdminAuthController;
 
 
 Route::get('/', function () {
@@ -56,9 +56,6 @@ Route::post('tiket-validasi/{id}/validasi', [TiketValidasiController::class, 'va
 Route::get('/api/jadwal-kapal/{id}', [JadwalKapalController::class, 'show']);
 Route::get('/api/tiket-validasi/{id}', [TiketValidasiController::class, 'show']);
 
-=======
-use App\Http\Controllers\Auth\AdminAuthController;
-
 // Splash screen (landing page)
 Route::get('/', [AdminAuthController::class, 'splash'])->name('splash');
 
@@ -69,10 +66,4 @@ Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post')
 // Logout
 Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
-// Admin Dashboard (protected)
-Route::middleware('admin.auth')->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-});
->>>>>>> 5dbb5e9b770a1d1b6c8c08ef2fa4d8432bd2a547
+

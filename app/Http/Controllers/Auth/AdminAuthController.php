@@ -24,9 +24,9 @@ class AdminAuthController extends Controller
     {
         // Jika sudah login, redirect ke dashboard
         if (session()->has('admin_id')) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('dashboard');
         }
-        
+
         return view('auth.login');
     }
 

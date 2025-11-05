@@ -136,6 +136,8 @@
             </nav>
         </div>
 
+
+
         <!-- Table Content -->
         <div class="overflow-x-auto">
             @if($activeTab == 'tiket')
@@ -182,7 +184,44 @@
 
                 @if(isset($tikets) && $tikets->hasPages())
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $tikets->links() }}
+                    <div class="flex justify-center items-center gap-3">
+                        {{-- Previous --}}
+                        @if ($tikets->onFirstPage())
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                ← Previous
+                            </button>
+                        @else
+                            <a href="{{ $tikets->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                ← Previous
+                            </a>
+                        @endif
+
+                        {{-- Numbers --}}
+                        <div class="flex gap-2">
+                            @foreach ($tikets->getUrlRange(1, $tikets->lastPage()) as $page => $url)
+                                @if ($page == $tikets->currentPage())
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-teal-600 rounded-lg">
+                                        {{ $page }}
+                                    </button>
+                                @else
+                                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+
+                        {{-- Next --}}
+                        @if ($tikets->hasMorePages())
+                            <a href="{{ $tikets->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                Next →
+                            </a>
+                        @else
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                Next →
+                            </button>
+                        @endif
+                    </div>
                 </div>
                 @endif
 
@@ -225,11 +264,48 @@
 
                 @if(isset($kendaraans) && $kendaraans->hasPages())
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $kendaraans->links() }}
+                    <div class="flex justify-center items-center gap-3">
+                        {{-- Previous --}}
+                        @if ($kendaraans->onFirstPage())
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                ← Previous
+                            </button>
+                        @else
+                            <a href="{{ $tikets->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                ← Previous
+                            </a>
+                        @endif
+
+                        {{-- Numbers --}}
+                        <div class="flex gap-2">
+                            @foreach ($kendaraans->getUrlRange(1, $kendaraans->lastPage()) as $page => $url)
+                                @if ($page == $kendaraans->currentPage())
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-teal-600 rounded-lg">
+                                        {{ $page }}
+                                    </button>
+                                @else
+                                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+
+                        {{-- Next --}}
+                        @if ($kendaraans->hasMorePages())
+                            <a href="{{ $kendaraans->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                Next →
+                            </a>
+                        @else
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                Next →
+                            </button>
+                        @endif
+                    </div>
                 </div>
                 @endif
 
-            @else
+            @elseif($activeTab == 'validasi')
                 <!-- TAB VALIDASI TIKET -->
                 <table class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
@@ -277,7 +353,44 @@
 
                 @if(isset($validasis) && $validasis->hasPages())
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $validasis->links() }}
+                    <div class="flex justify-center items-center gap-3">
+                        {{-- Previous --}}
+                        @if ($validasis->onFirstPage())
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                ← Previous
+                            </button>
+                        @else
+                            <a href="{{ $tikets->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                ← Previous
+                            </a>
+                        @endif
+
+                        {{-- Numbers --}}
+                        <div class="flex gap-2">
+                            @foreach ($validasis->getUrlRange(1, $validasis->lastPage()) as $page => $url)
+                                @if ($page == $validasis->currentPage())
+                                    <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-teal-600 rounded-lg">
+                                        {{ $page }}
+                                    </button>
+                                @else
+                                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+                        </div>
+
+                        {{-- Next --}}
+                        @if ($validasis->hasMorePages())
+                            <a href="{{ $validasis->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                Next →
+                            </a>
+                        @else
+                            <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                                Next →
+                            </button>
+                        @endif
+                    </div>
                 </div>
                 @endif
             @endif

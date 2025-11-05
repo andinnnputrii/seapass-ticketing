@@ -282,7 +282,6 @@
                                     <button class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
                                         <i data-feather="trash-2" class="w-4 h-4"></i>
                                     </button>
-
                                 </div>
                             </td>
                         </tr>
@@ -292,44 +291,48 @@
             </table>
         </div>
 
-        @if ($jadwalKeberangkatan->hasPages())
-        <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-        {{-- Previous Button --}}
-        @if ($jadwalKeberangkatan->onFirstPage())
-            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">
-                ← Previous
-            </span>
-        @else
-            <a href="{{ $jadwalKeberangkatan->previousPageUrl() }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
-                ← Previous
-            </a>
-        @endif
-
-        {{-- Page Numbers --}}
-        <div class="flex items-center gap-1">
-            @foreach ($jadwalKeberangkatan->getUrlRange(1, $jadwalKeberangkatan->lastPage()) as $page => $url)
-                @if ($page == $jadwalKeberangkatan->currentPage())
-                    <span class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 border border-brand-600 rounded">{{ $page }}</span>
-                @elseif ($page == 1 || $page == $jadwalKeberangkatan->lastPage() || abs($page - $jadwalKeberangkatan->currentPage()) <= 2)
-                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">{{ $page }}</a>
-                @elseif (abs($page - $jadwalKeberangkatan->currentPage()) == 3)
-                    <span class="px-2 py-2 text-gray-500">...</span>
+        @if(isset($jadwalKeberangkatan) && $jadwalKeberangkatan->hasPages())
+        <div class="px-6 py-4 border-t border-gray-200">
+            <div class="flex justify-center items-center gap-3">
+                {{-- Previous --}}
+                @if ($jadwalKeberangkatan->onFirstPage())
+                    <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                        ← Previous
+                    </button>
+                @else
+                    <a href="{{ $tikets->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                        ← Previous
+                    </a>
                 @endif
-            @endforeach
-        </div>
 
-        {{-- Next Button --}}
-        @if ($jadwalKeberangkatan->hasMorePages())
-            <a href="{{ $jadwalKeberangkatan->nextPageUrl() }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
-                Next →
-            </a>
-        @else
-            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">
-                Next →
-            </span>
+                    {{-- Numbers --}}
+                    <div class="flex gap-2">
+                        @foreach ($jadwalKeberangkatan->getUrlRange(1, $jadwalKeberangkatan->lastPage()) as $page => $url)
+                            @if ($page == $jadwalKeberangkatan->currentPage())
+                                <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-teal-600 rounded-lg">
+                                    {{ $page }}
+                                </button>
+                            @else
+                                <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                    {{ $page }}
+                                </a>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    {{-- Next --}}
+                    @if ($jadwalKeberangkatan->hasMorePages())
+                        <a href="{{ $jadwalKeberangkatan->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                            Next →
+                        </a>
+                    @else
+                        <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                            Next →
+                        </button>
+                    @endif
+                </div>
+            </div>
         @endif
-      </div>
-    @endif
 
     <!-- Log Perubahan Jadwal -->
     <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
@@ -389,46 +392,49 @@
             </table>
         </div>
 
-        @if ($logPerubahan->hasPages())
-    <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-        {{-- Previous Button --}}
-        @if ($logPerubahan->onFirstPage())
-            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">
-                ← Previous
-            </span>
-        @else
-            <a href="{{ $logPerubahan->previousPageUrl() }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
-                ← Previous
-            </a>
-        @endif
-
-        {{-- Page Numbers --}}
-        <div class="flex items-center gap-1">
-            @foreach ($logPerubahan->getUrlRange(1, $logPerubahan->lastPage()) as $page => $url)
-                @if ($page == $logPerubahan->currentPage())
-                    <span class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 border border-brand-600 rounded">{{ $page }}</span>
-                @elseif ($page == 1 || $page == $logPerubahan->lastPage() || abs($page - $logPerubahan->currentPage()) <= 2)
-                    <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50">{{ $page }}</a>
-                @elseif (abs($page - $logPerubahan->currentPage()) == 3)
-                    <span class="px-2 py-2 text-gray-500">...</span>
+        @if(isset($logPerubahan) && $logPerubahan->hasPages())
+        <div class="px-6 py-4 border-t border-gray-200">
+            <div class="flex justify-center items-center gap-3">
+                {{-- Previous --}}
+                @if ($logPerubahan->onFirstPage())
+                    <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                        ← Previous
+                    </button>
+                @else
+                    <a href="{{ $logPerubahan->previousPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                        ← Previous
+                    </a>
                 @endif
-            @endforeach
-        </div>
 
-        {{-- Next Button --}}
-        @if ($logPerubahan->hasMorePages())
-            <a href="{{ $logPerubahan->nextPageUrl() }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
-                Next →
-            </a>
-        @else
-            <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">
-                Next →
-            </span>
+                    {{-- Numbers --}}
+                    <div class="flex gap-2">
+                        @foreach ($logPerubahan->getUrlRange(1, $logPerubahan->lastPage()) as $page => $url)
+                            @if ($page == $logPerubahan->currentPage())
+                                <button class="px-4 py-2 text-sm font-medium text-white bg-teal-600 border border-teal-600 rounded-lg">
+                                    {{ $page }}
+                                </button>
+                            @else
+                                <a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                                    {{ $page }}
+                                </a>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    {{-- Next --}}
+                    @if ($logPerubahan->hasMorePages())
+                        <a href="{{ $logPerubahan->nextPageUrl() }}" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg hover:border-teal-500 hover:text-teal-600 transition-colors">
+                            Next →
+                        </a>
+                    @else
+                        <button disabled class="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 bg-white border border-gray-200 rounded-lg cursor-not-allowed opacity-50">
+                            Next →
+                        </button>
+                    @endif
+                </div>
+            </div>
         @endif
-        </div>
-    @endif
-    </div>
-</div>
+
 
 <script>
 function syncData() {

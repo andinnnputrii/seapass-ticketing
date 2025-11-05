@@ -95,7 +95,7 @@
 
       {{-- Logo dengan link ke dashboard --}}
       <a href="{{ route('dashboard') }}" class="flex items-center hover:opacity-80 transition-opacity">
-        <img src="{{ asset('images/logoputih.png') }}" alt="SeaPass Logo" class="h-10 object-contain">
+        <img src="{{ asset('images/logo.png') }}" alt="SeaPass Logo" class="h-10 object-contain">
       </a>
     </div>
 

@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@section('content')
+@section('content')<i class="fa-solid fa-circle-info"></i>
 @php
   $formattedRevenue = 'Rp '.number_format($stats['revenue'] ?? 0, 0, ',', '.');
 @endphp
@@ -69,9 +69,10 @@
   {{-- Chart --}}
   <div class="mt-6">
     <x-line-chart
-      :labels="$chart['labels'] ?? []"
-      :datasets="['express' => ($chart['express'] ?? []), 'regular' => ($chart['regular'] ?? [])]"
-      height="240"
+    :labels="$chart['labels']"
+    :datasets="['express' => $chart['express'], 'regular' => $chart['regular']]"
+    :weeklyBreakdown="$weeklyBreakdown"
+    height="300"
     />
   </div>
 

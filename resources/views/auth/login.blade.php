@@ -9,7 +9,7 @@
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    
+
     @keyframes slideInRight {
         from {
             opacity: 0;
@@ -20,15 +20,15 @@
             transform: translateX(0);
         }
     }
-    
+
     .slide-in {
         animation: slideInRight 0.8s ease-out;
     }
-    
+
     .input-focus {
         transition: all 0.3s ease;
     }
-    
+
     .input-focus:focus {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
@@ -42,12 +42,12 @@
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('images/bgLogin.png') }}" alt="Background" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/80 via-emerald-700/85 to-teal-800/90"></div>
-        
+
         <!-- Decorative circles -->
         <div class="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl"></div>
         <div class="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
     </div>
-    
+
     <!-- Content -->
     <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md slide-in">
@@ -56,7 +56,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="SeaPass Logo" class="h-20 w-auto mx-auto mb-4 drop-shadow-2xl">
                 <p class="text-white/80 text-sm">Administrator Login Panel</p>
             </div>
-            
+
             <!-- Login Card -->
             <div class="glass-effect rounded-3xl shadow-2xl p-8">
                 <!-- Welcome Text -->
@@ -64,7 +64,7 @@
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Selamat Datang</h2>
                     <p class="text-gray-600 text-sm">Login untuk melanjutkan ke dashboard</p>
                 </div>
-                
+
                 <!-- Success Message -->
                 @if(session('success'))
                 <div class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-lg">
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 @endif
-                
+
                 <!-- Error Message -->
                 @if($errors->any())
                 <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
@@ -92,11 +92,11 @@
                     </div>
                 </div>
                 @endif
-                
+
                 <!-- Login Form -->
                 <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
                     @csrf
-                    
+
                     <!-- Username Field -->
                     <div>
                         <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -108,10 +108,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
                             </div>
-                            <input 
-                                type="text" 
-                                id="username" 
-                                name="username" 
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
                                 value="{{ old('username') }}"
                                 class="input-focus w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-200 outline-none text-gray-700"
                                 placeholder="Masukkan username"
@@ -120,7 +120,7 @@
                             >
                         </div>
                     </div>
-                    
+
                     <!-- Password Field -->
                     <div>
                         <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -132,17 +132,17 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </div>
-                            <input 
-                                type="password" 
-                                id="password" 
-                                name="password" 
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
                                 class="input-focus w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition duration-200 outline-none text-gray-700"
                                 placeholder="Masukkan password"
                                 required
                                 autocomplete="current-password"
                             >
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 onclick="togglePassword()"
                                 class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition"
                             >
@@ -153,7 +153,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Remember Me -->
                     <div class="flex items-center justify-between">
                         <label class="flex items-center">
@@ -161,10 +161,10 @@
                             <span class="ml-2 text-sm text-gray-600">Remember me</span>
                         </label>
                     </div>
-                    
+
                     <!-- Login Button -->
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-semibold py-4 px-4 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                     >
                         <span>Login</span>
@@ -173,7 +173,7 @@
                         </svg>
                     </button>
                 </form>
-                
+
                 <!-- Footer -->
                 <div class="mt-6 text-center">
                     <p class="text-xs text-gray-500">
@@ -181,7 +181,7 @@
                     </p>
                 </div>
             </div>
-            
+
             <!-- Help Text -->
             <div class="mt-6 text-center">
                 <p class="text-white/80 text-sm">
@@ -196,7 +196,7 @@
 function togglePassword() {
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eye-icon');
-    
+
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
         eyeIcon.innerHTML = `
