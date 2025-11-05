@@ -53,10 +53,13 @@ class AdminAuthController extends Controller
             // Update last login
             $admin->update(['last_login' => now()]);
 
-            // Simpan session
-            session([
-                'admin_username' => $admin->username,
-            ]);
+            // Simpan session dengan KEY yang BENAR
+        session([
+            'admin_id' => $admin->id,              // ✅ TAMBAHKAN INI (yang dicek middleware)
+            'admin_username' => $admin->username,  // ✅ Tetap simpan untuk keperluan lain
+            'admin_name' => $admin->name,          // ✅ Untuk tampilan di navbar
+            'admin_email' => $admin->email,        // ✅ Optional
+        ]);
 
             return redirect()->route('admin.dashboard');
         }
