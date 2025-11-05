@@ -1,11 +1,78 @@
 @import 'tailwindcss';
 
+<<<<<<< HEAD
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+=======
+/* Source files untuk Tailwind v4 */
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+@source '../**/*.js';
+
+/* Theme customization */
+>>>>>>> 5dbb5e9b770a1d1b6c8c08ef2fa4d8432bd2a547
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+<<<<<<< HEAD
+=======
+
+/* Base styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply antialiased;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #059669;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #10b981 #f1f1f1;
+}
+
+/* Selection color - tema emerald */
+::selection {
+    background-color: #10b981;
+    color: white;
+}
+
+::-moz-selection {
+    background-color: #10b981;
+    color: white;
+}
+
+/* Tambahan utility untuk animasi smooth */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+>>>>>>> 5dbb5e9b770a1d1b6c8c08ef2fa4d8432bd2a547
