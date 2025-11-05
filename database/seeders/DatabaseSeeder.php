@@ -7,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $this->call([
@@ -17,7 +14,7 @@ class DatabaseSeeder extends Seeder
             KapalSeeder::class,
             JadwalKapalSeeder::class,
             AdminSeeder::class,
-            TiketSeeder::class, 
+            TiketSeeder::class,
         ]);
 
         $this->command->info('');
@@ -30,6 +27,10 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        // Jalankan semua seeder yang kamu miliki
+        $this->call([
+            AdminSeeder::class,
+            TransactionSeeder::class,
         ]);
     }
 }

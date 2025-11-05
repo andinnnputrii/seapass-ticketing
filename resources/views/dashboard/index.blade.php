@@ -3,10 +3,13 @@
 @section('title', 'Dashboard')
 
 @section('content')<i class="fa-solid fa-circle-info"></i>
+
 @php
   $formattedRevenue = 'Rp '.number_format($stats['revenue'] ?? 0, 0, ',', '.');
 @endphp
 
+<x-layouts.app :title="'Dashboard'">
+  {{-- Row: big stats --}}
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
     <x-stat-card
       title="Tiket Terjual Hari Ini"
@@ -72,7 +75,10 @@
     :labels="$chart['labels']"
     :datasets="['express' => $chart['express'], 'regular' => $chart['regular']]"
     :weeklyBreakdown="$weeklyBreakdown"
-    height="300"
+    :height="300"
+    :labels="$chart['labels'] ?? []"
+    :datasets="['express' => ($chart['express'] ?? []), 'regular' => ($chart['regular'] ?? [])]"
+    :height="240"
     />
   </div>
 
@@ -132,6 +138,7 @@
       <button class="px-3 py-1.5 rounded-md border border-slate-200 hover:bg-slate-50">Next ›</button>
     </div>
   </div>
-
   @endsection
 
+=======
+</x-layouts.app>
