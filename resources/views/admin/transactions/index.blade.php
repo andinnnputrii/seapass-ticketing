@@ -1,8 +1,9 @@
-@php
-  $formattedTotal = 'Rp ' . number_format($totalTransactions ?? 0, 0, ',', '.');
-@endphp
+@extends('layouts.app')
 
-<x-layouts.app :title="'Transaksi & Refund'">
+@section('title', 'Transaksi & Refund')
+
+@section('content')
+
   <!-- Breadcrumb -->
   <div class="flex items-center justify-between mb-6">
     <div>
@@ -123,11 +124,11 @@
           </svg>
           Cari
         </label>
-        <input 
-          type="text" 
-          name="search" 
+        <input
+          type="text"
+          name="search"
           value="{{ request('search') }}"
-          placeholder="Cari nomor transaksi atau nama penumpang..." 
+          placeholder="Cari nomor transaksi atau nama penumpang..."
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
         >
       </div>
@@ -149,7 +150,7 @@
     <div class="px-6 py-4 border-b border-gray-200">
       <h2 class="text-lg font-semibold text-gray-800">Riwayat Transaksi</h2>
     </div>
-    
+
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead class="bg-gray-50 border-b border-gray-200">
@@ -185,7 +186,7 @@
                 {!! $transaction->getStatusBadge() !!}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <button 
+                <button
                   onclick="window.location.href='{{ route('admin.transactions.show', $transaction->id) }}'"
                   class="inline-flex items-center px-3 py-1 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition"
                 >
@@ -227,7 +228,7 @@
         Lihat Semua →
       </a>
     </div>
-    
+
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead class="bg-gray-50 border-b border-gray-200">
@@ -249,7 +250,7 @@
               ->take(5)
               ->get();
           @endphp
-          
+
           @forelse($pendingRefundsData as $refund)
             <tr class="hover:bg-gray-50">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -274,7 +275,7 @@
                 <div class="flex gap-2">
                   <form action="{{ route('admin.refunds.approve', $refund->id) }}" method="POST" class="inline">
                     @csrf
-                    <button 
+                    <button
                       type="submit"
                       onclick="return confirm('Setujui refund ini?')"
                       class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition"
@@ -284,7 +285,7 @@
                   </form>
                   <form action="{{ route('admin.refunds.reject', $refund->id) }}" method="POST" class="inline">
                     @csrf
-                    <button 
+                    <button
                       type="submit"
                       onclick="return confirm('Tolak refund ini?')"
                       class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition"
@@ -316,4 +317,4 @@
       {{ session('success') }}
     </div>
   @endif
-</x-layouts.app>
+@endsection

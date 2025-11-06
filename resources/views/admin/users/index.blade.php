@@ -1,11 +1,14 @@
-<x-layouts.app :title="'Pengguna & Akses'">
-  <!-- Header -->
+@extends('layouts.app')
+
+@section('title', 'Transaksi & Refund')
+
+@section('content')  <!-- Header -->
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
     <div>
       <h1 class="text-2xl font-bold text-gray-800">Pengguna & Akses</h1>
       <p class="text-sm text-gray-600 mt-1">Kelola pengguna internal (Admin & Operator) dan pelanggan terdaftar</p>
     </div>
-    
+
     <!-- Action Buttons -->
     <div class="mt-4 lg:mt-0 flex gap-2">
       <button onclick="exportUsers()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center gap-2">
@@ -73,14 +76,14 @@
     <!-- Tabs -->
     <div class="border-b border-gray-200">
       <nav class="flex -mb-px">
-        <a href="{{ route('admin.users.index', ['tab' => 'internal']) }}" 
+        <a href="{{ route('admin.users.index', ['tab' => 'internal']) }}"
            class="px-6 py-4 text-sm font-medium border-b-2 flex items-center gap-2 {{ $tab === 'internal' ? 'border-teal-600 text-teal-600' : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300' }}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
           </svg>
           Tim Internal ({{ $totalAdmins + $totalOperators }})
         </a>
-        <a href="{{ route('admin.users.index', ['tab' => 'customers']) }}" 
+        <a href="{{ route('admin.users.index', ['tab' => 'customers']) }}"
            class="px-6 py-4 text-sm font-medium border-b-2 flex items-center gap-2 {{ $tab === 'customers' ? 'border-teal-600 text-teal-600' : 'border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300' }}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
@@ -94,18 +97,18 @@
     <div class="p-4 border-b border-gray-200 bg-gray-50">
       <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-wrap gap-3">
         <input type="hidden" name="tab" value="{{ $tab }}">
-        
+
         <!-- Search -->
         <div class="flex-1 min-w-[250px]">
           <div class="relative">
             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-            <input 
-              type="text" 
-              name="search" 
+            <input
+              type="text"
+              name="search"
               value="{{ request('search') }}"
-              placeholder="Cari nama, email, {{ $tab === 'internal' ? 'atau ID user' : 'atau nomor telepon' }}..." 
+              placeholder="Cari nama, email, {{ $tab === 'internal' ? 'atau ID user' : 'atau nomor telepon' }}..."
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             >
           </div>
@@ -174,7 +177,7 @@
               <td class="px-4 py-4">
                 <input type="checkbox" class="rounded border-gray-300 text-teal-600 focus:ring-teal-500">
               </td>
-              
+
               @if($tab === 'internal')
                 <!-- Internal User -->
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -406,12 +409,12 @@
       try {
         const response = await fetch(`/admin/users/${type}/${id}`);
         const user = await response.json();
-        
+
         const modal = document.getElementById('viewUserModal');
         const content = document.getElementById('viewUserContent');
-        
+
         const isInternal = type === 'internal';
-        
+
         content.innerHTML = `
           <div class="flex items-center gap-4 mb-6">
             <div class="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-xl">
@@ -423,7 +426,7 @@
               ${isInternal ? `<span class="inline-block mt-1 px-2 py-1 text-xs font-medium rounded-full ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}">${user.role}</span>` : ''}
             </div>
           </div>
-          
+
           <div class="grid grid-cols-2 gap-4 mb-6">
             ${isInternal ? `
               <div>
@@ -499,7 +502,7 @@
             ` : ''}
           </div>
         `;
-        
+
         modal.classList.remove('hidden');
       } catch (error) {
         alert('Gagal memuat detail user');
@@ -517,17 +520,17 @@
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/admin/users/${type}/${id}/reset-password`;
-        
+
         const csrf = document.createElement('input');
         csrf.type = 'hidden';
         csrf.name = '_token';
         csrf.value = '{{ csrf_token() }}';
-        
+
         const pass = document.createElement('input');
         pass.type = 'hidden';
         pass.name = 'new_password';
         pass.value = newPassword;
-        
+
         form.appendChild(csrf);
         form.appendChild(pass);
         document.body.appendChild(form);
@@ -540,17 +543,17 @@
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/admin/users/${type}/${id}`;
-        
+
         const csrf = document.createElement('input');
         csrf.type = 'hidden';
         csrf.name = '_token';
         csrf.value = '{{ csrf_token() }}';
-        
+
         const method = document.createElement('input');
         method.type = 'hidden';
         method.name = '_method';
         method.value = 'DELETE';
-        
+
         form.appendChild(csrf);
         form.appendChild(method);
         document.body.appendChild(form);
@@ -569,4 +572,4 @@
     }, 3000);
   </script>
   @endpush
-</x-layouts.app>
+@endsection

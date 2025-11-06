@@ -20,23 +20,17 @@ class DashboardController extends Controller
             'trendRevenue' => -0.012,
         ];
 
-<<<<<<< HEAD
         // Data overview untuk chart (30 hari)
-=======
->>>>>>> 9e94dabede9e59c6c55d80a4118e682c1d0e66a2
         $chart = [
             'labels' => range(1, 30),
             'express' => [120,140,160,220,460,310,280,260,300,350,290,400,480,150,220,500,520,480,510,470,530,560,420,390,300,250,200,280,320,360],
             'regular' => [90,80,150,100,130,200,240,210,220,230,250,260,270,300,310,330,290,310,320,340,300,280,260,250,240,230,220,210,200,190],
         ];
 
-<<<<<<< HEAD
         // Data drill-down: breakdown mingguan untuk setiap tanggal (30 titik)
         // Format: setiap tanggal punya 4 minggu breakdown
         $weeklyBreakdown = $this->generateWeeklyBreakdown($chart['express'], $chart['regular']);
 
-=======
->>>>>>> 9e94dabede9e59c6c55d80a4118e682c1d0e66a2
         $schedule = [
             [
                 'id' => 'J001','ship' => 'KM Tidar','from' => 'Tanjung Perak','to' => 'Tanjung Emas',
@@ -79,7 +73,6 @@ class DashboardController extends Controller
             ['label'=>'Pengaturan Sistem','icon'=>'settings','route'=>'#'],
         ];
 
-<<<<<<< HEAD
         return view('dashboard.index', compact('stats', 'chart', 'weeklyBreakdown', 'schedule', 'menuItems'));
     }
 
@@ -153,6 +146,5 @@ class DashboardController extends Controller
             'success' => false,
             'message' => 'Data tidak ditemukan'
         ], 404);
-        return view('dashboard.index', compact('stats', 'chart', 'schedule', 'menuItems'));
     }
 }

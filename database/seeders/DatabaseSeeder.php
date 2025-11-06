@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -10,27 +9,24 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            AdminSeeder::class,
+            UserManagementSeeder::class,
             OperatorSeeder::class,
             KapalSeeder::class,
             JadwalKapalSeeder::class,
-            AdminSeeder::class,
             TiketSeeder::class,
+            TransactionSeeder::class,
         ]);
 
+        // Seeder sukses info
         $this->command->info('');
-        $this->command->info('================================================');
         $this->command->info('✓ All seeders completed successfully!');
-        $this->command->info('================================================');
+        $this->command->info('');
 
-        // User::factory(10)->create();
-
-        User::factory()->create([
+        // Tambahkan 1 user dummy
+        \App\Models\User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        // Jalankan semua seeder yang kamu miliki
-        $this->call([
-            AdminSeeder::class,
-            TransactionSeeder::class,
         ]);
     }
 }

@@ -37,7 +37,7 @@
 @endsection
 
 @section('content')
-<div class="min-h-screen relative overflow-hidden">
+<div class="h-screen relative overflow-hidden">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
         <img src="{{ asset('images/bgLogin.png') }}" alt="Background" class="w-full h-full object-cover">
@@ -51,11 +51,6 @@
     <!-- Content -->
     <div class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md slide-in">
-            <!-- Logo Section -->
-            <div class="text-center mb-8">
-                <img src="{{ asset('images/logo.png') }}" alt="SeaPass Logo" class="h-20 w-auto mx-auto mb-4 drop-shadow-2xl">
-                <p class="text-white/80 text-sm">Administrator Login Panel</p>
-            </div>
 
             <!-- Login Card -->
             <div class="glass-effect rounded-3xl shadow-2xl p-8">

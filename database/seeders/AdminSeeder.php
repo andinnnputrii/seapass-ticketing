@@ -15,8 +15,8 @@ class AdminSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@seapass.com',
             'password' => Hash::make('admin123'),
-            'role' => 'admin',       
-            'status' => 'active',     
+            'role' => 'admin',
+            'status' => 'active',
         ]);
 
         // Tambah operator dummy

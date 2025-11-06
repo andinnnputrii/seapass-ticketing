@@ -1,4 +1,8 @@
-<x-layouts.app :title="'Kelola Refund'">
+@extends('layouts.app')
+
+@section('title', 'Transaksi & Refund')
+
+@section('content')
   <!-- Breadcrumb -->
   <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Kelola Refund</h1>
@@ -136,14 +140,14 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm">
                 @if($refund->status === 'pending')
-                  <button 
+                  <button
                     onclick="openRefundModal({{ json_encode($refund) }})"
                     class="px-3 py-1 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 transition"
                   >
                     Review
                   </button>
                 @else
-                  <button 
+                  <button
                     onclick="viewRefundDetail({{ json_encode($refund) }})"
                     class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition"
                   >
@@ -186,7 +190,7 @@
           </svg>
         </button>
       </div>
-      
+
       <div id="modalContent" class="mt-4">
         <!-- Content will be injected by JavaScript -->
       </div>
@@ -203,7 +207,7 @@
     function openRefundModal(refund) {
       const modal = document.getElementById('refundModal');
       const content = document.getElementById('modalContent');
-      
+
       content.innerHTML = `
         <div class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
@@ -224,7 +228,7 @@
               <p class="font-semibold text-teal-600">Rp ${new Intl.NumberFormat('id-ID').format(refund.refund_amount)}</p>
             </div>
           </div>
-          
+
           <div>
             <p class="text-sm text-gray-600 mb-2">Alasan Refund</p>
             <div class="p-3 bg-gray-50 rounded-lg">
@@ -235,23 +239,23 @@
           <form id="refundForm" class="space-y-3">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Admin (Opsional)</label>
-              <textarea 
-                name="admin_notes" 
-                rows="3" 
+              <textarea
+                name="admin_notes"
+                rows="3"
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Tambahkan catatan untuk pelanggan..."
               ></textarea>
             </div>
 
             <div class="flex gap-3 pt-4">
-              <button 
+              <button
                 type="button"
                 onclick="approveRefund(${refund.id})"
                 class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
               >
                 Setujui Refund
               </button>
-              <button 
+              <button
                 type="button"
                 onclick="rejectRefund(${refund.id})"
                 class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
@@ -262,7 +266,7 @@
           </form>
         </div>
       `;
-      
+
       modal.classList.remove('hidden');
     }
 
@@ -272,10 +276,10 @@
 
     function approveRefund(refundId) {
       if (!confirm('Yakin ingin menyetujui refund ini?')) return;
-      
+
       const form = document.getElementById('refundForm');
       const formData = new FormData(form);
-      
+
       fetch(`/admin/refunds/${refundId}/approve`, {
         method: 'POST',
         headers: {
@@ -292,10 +296,10 @@
 
     function rejectRefund(refundId) {
       if (!confirm('Yakin ingin menolak refund ini?')) return;
-      
+
       const form = document.getElementById('refundForm');
       const formData = new FormData(form);
-      
+
       fetch(`/admin/refunds/${refundId}/reject`, {
         method: 'POST',
         headers: {
@@ -313,11 +317,11 @@
     function viewRefundDetail(refund) {
       const modal = document.getElementById('refundModal');
       const content = document.getElementById('modalContent');
-      
-      const statusBadge = refund.status === 'approved' 
+
+      const statusBadge = refund.status === 'approved'
         ? '<span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Disetujui</span>'
         : '<span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">Ditolak</span>';
-      
+
       content.innerHTML = `
         <div class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
@@ -342,7 +346,7 @@
               <p class="font-semibold text-gray-900">${refund.transaction.passenger_name}</p>
             </div>
           </div>
-          
+
           <div>
             <p class="text-sm text-gray-600 mb-2">Alasan Refund</p>
             <div class="p-3 bg-gray-50 rounded-lg">
@@ -363,9 +367,9 @@
             <div class="pt-3 border-t">
               <p class="text-sm text-gray-600">Diproses Oleh</p>
               <p class="font-semibold text-gray-900">${refund.approved_by.name || 'Admin'}</p>
-              <p class="text-xs text-gray-500">${new Date(refund.approved_at).toLocaleDateString('id-ID', { 
-                year: 'numeric', 
-                month: 'long', 
+              <p class="text-xs text-gray-500">${new Date(refund.approved_at).toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
@@ -374,7 +378,7 @@
           ` : ''}
 
           <div class="flex justify-end pt-4">
-            <button 
+            <button
               onclick="closeRefundModal()"
               class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
             >
@@ -383,7 +387,7 @@
           </div>
         </div>
       `;
-      
+
       modal.classList.remove('hidden');
     }
 
@@ -394,4 +398,4 @@
       }
     });
   </script>
-</x-layouts.app>
+@endsection

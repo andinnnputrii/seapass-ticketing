@@ -126,9 +126,9 @@
         ['label'=>'Jadwal Kapal','icon'=>'calendar','route'=>route('jadwal-kapal.index'),'name'=>'jadwal-kapal.index'],
         ['label'=>'Tiket & Validasi','icon'=>'file-text','route'=>route('tiket-validasi.index'),'name'=>'tiket-validasi.index'],
         ['label'=>'Data Penumpang','icon'=>'users','route'=>'#','name'=>'penumpang'],
-        ['label'=>'Transaksi & Refund','icon'=>'credit-card','route'=>'#','name'=>'transaksi'],
-        ['label'=>'Laporan & Analitik','icon'=>'bar-chart-2','route'=>'#','name'=>'laporan'],
-        ['label'=>'Pengguna & Akses','icon'=>'shield','route'=>'#','name'=>'pengguna'],
+        ['label'=>'Transaksi & Refund','icon'=>'credit-card','route'=>route('admin.transactions.index'),'name'=>'admin.transactions.index'],
+        ['label'=>'Laporan & Analitik','icon'=>'bar-chart-2','route'=>route('admin.reports.index'),'name'=>'admin.reports.index'],
+        ['label'=>'Pengguna & Akses','icon'=>'shield','route'=>route('admin.users.index'),'name'=>'admin.users.index'],
         ['label'=>'Pengaduan','icon'=>'message-square','route'=>'#','name'=>'pengaduan'],
         ['label'=>'Pengaturan Sistem','icon'=>'settings','route'=>'#','name'=>'pengaturan'],
       ];

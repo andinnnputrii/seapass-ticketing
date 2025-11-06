@@ -4,14 +4,13 @@
 <div class="container-fluid px-6 py-4">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Tiket & Validasi</h1>
 
-        <!-- Breadcrumb -->
+        {{-- Judul + Breadcrumb --}}
+        <div>
+        <h2 class="text-2xl font-semibold text-slate-800 mb-1">Tiket Validasi</h2>
         <nav class="flex items-center text-sm text-teal-600">
-            <a href="#" class="hover:underline">Tiket & Validasi</a>
-            <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
+            <span>Tiket Validasi</span>
+            <span class="mx-2">></span>
             <span class="font-semibold">
                 @if($activeTab == 'tiket') Tiket Pemesanan
                 @elseif($activeTab == 'kendaraan') Kendaraan
@@ -19,6 +18,7 @@
                 @endif
             </span>
         </nav>
+        </div>
     </div>
 
     <!-- Statistik Cards -->

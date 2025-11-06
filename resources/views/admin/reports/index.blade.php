@@ -1,8 +1,12 @@
 @php
-  $formattedSales = 'Rp ' . number_format($salesStats['total_sales'] ?? 0, 0, ',', '.');
+    $formattedSales = 'Rp ' . number_format($formattedSales ?? 0, 0, ',', '.');
 @endphp
 
-<x-layouts.app :title="'Laporan & Analitik'">
+@extends('layouts.app')
+
+@section('title', 'Transaksi & Refund')
+
+@section('content')
   <!-- Header -->
   <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
     <div>
@@ -13,7 +17,7 @@
         <span class="text-teal-600 font-medium">Laporan & Analitik</span>
       </nav>
     </div>
-    
+
     <!-- Filter & Export -->
     <div class="mt-4 lg:mt-0 flex flex-wrap gap-2">
       <button onclick="document.getElementById('filterModal').classList.remove('hidden')" class="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition flex items-center gap-2">
@@ -273,8 +277,8 @@
         <div class="bg-gray-50 rounded-lg p-6">
           <h3 class="text-lg font-semibold text-gray-800 mb-2">Analisa Penjualan Tiket</h3>
           <p class="text-sm text-gray-600 mb-6">
-            <span class="font-medium">Level 1:</span> Klik bulan untuk lihat data mingguan • 
-            <span class="font-medium">Level 2:</span> Klik minggu untuk lihat data harian • 
+            <span class="font-medium">Level 1:</span> Klik bulan untuk lihat data mingguan •
+            <span class="font-medium">Level 2:</span> Klik minggu untuk lihat data harian •
             <span class="font-medium">Level 3:</span> Detail per hari
           </p>
           <div id="salesChartFull" style="height: 450px;"></div>
@@ -612,18 +616,18 @@
       <form method="GET" action="{{ route('admin.reports.index') }}" class="p-6 space-y-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
-          <input 
-            type="date" 
-            name="start_date" 
+          <input
+            type="date"
+            name="start_date"
             value="{{ $startDate }}"
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           >
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
-          <input 
-            type="date" 
-            name="end_date" 
+          <input
+            type="date"
+            name="end_date"
             value="{{ $endDate }}"
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           >
@@ -742,8 +746,8 @@
       }
     };
 
-    // ========== DATA DEFINITIONS ==========
-    
+    //  DATA DEFINITIONS
+
     // Sales Data with 3-Level Drilldown (Monthly -> Weekly -> Daily)
     const salesData = {
       series: [{
@@ -761,71 +765,71 @@
       }],
       drilldown: [
         // Level 2: Weekly data for each month
-        { 
-          name: 'Januari', 
-          id: 'januari', 
+        {
+          name: 'Januari',
+          id: 'januari',
           data: [
-            ['Minggu 1', 120, 'januari-w1'], 
-            ['Minggu 2', 110, 'januari-w2'], 
-            ['Minggu 3', 105, 'januari-w3'], 
+            ['Minggu 1', 120, 'januari-w1'],
+            ['Minggu 2', 110, 'januari-w2'],
+            ['Minggu 3', 105, 'januari-w3'],
             ['Minggu 4', 115, 'januari-w4']
-          ], 
-          color: '#0f766e' 
+          ],
+          color: '#0f766e'
         },
-        { 
-          name: 'Februari', 
-          id: 'februari', 
+        {
+          name: 'Februari',
+          id: 'februari',
           data: [
-            ['Minggu 1', 95, 'februari-w1'], 
-            ['Minggu 2', 100, 'februari-w2'], 
-            ['Minggu 3', 90, 'februari-w3'], 
+            ['Minggu 1', 95, 'februari-w1'],
+            ['Minggu 2', 100, 'februari-w2'],
+            ['Minggu 3', 90, 'februari-w3'],
             ['Minggu 4', 95, 'februari-w4']
-          ], 
-          color: '#14b8a6' 
+          ],
+          color: '#14b8a6'
         },
-        { 
-          name: 'Maret', 
-          id: 'maret', 
+        {
+          name: 'Maret',
+          id: 'maret',
           data: [
-            ['Minggu 1', 135, 'maret-w1'], 
-            ['Minggu 2', 130, 'maret-w2'], 
-            ['Minggu 3', 125, 'maret-w3'], 
+            ['Minggu 1', 135, 'maret-w1'],
+            ['Minggu 2', 130, 'maret-w2'],
+            ['Minggu 3', 125, 'maret-w3'],
             ['Minggu 4', 130, 'maret-w4']
-          ], 
-          color: '#2dd4bf' 
+          ],
+          color: '#2dd4bf'
         },
-        { 
-          name: 'April', 
-          id: 'april', 
+        {
+          name: 'April',
+          id: 'april',
           data: [
-            ['Minggu 1', 105, 'april-w1'], 
-            ['Minggu 2', 100, 'april-w2'], 
-            ['Minggu 3', 102, 'april-w3'], 
+            ['Minggu 1', 105, 'april-w1'],
+            ['Minggu 2', 100, 'april-w2'],
+            ['Minggu 3', 102, 'april-w3'],
             ['Minggu 4', 103, 'april-w4']
-          ], 
-          color: '#5eead4' 
+          ],
+          color: '#5eead4'
         },
-        { 
-          name: 'Mei', 
-          id: 'mei', 
+        {
+          name: 'Mei',
+          id: 'mei',
           data: [
-            ['Minggu 1', 125, 'mei-w1'], 
-            ['Minggu 2', 120, 'mei-w2'], 
-            ['Minggu 3', 122, 'mei-w3'], 
+            ['Minggu 1', 125, 'mei-w1'],
+            ['Minggu 2', 120, 'mei-w2'],
+            ['Minggu 3', 122, 'mei-w3'],
             ['Minggu 4', 123, 'mei-w4']
-          ], 
-          color: '#99f6e4' 
+          ],
+          color: '#99f6e4'
         },
-        { 
-          name: 'Juni', 
-          id: 'juni', 
+        {
+          name: 'Juni',
+          id: 'juni',
           data: [
-            ['Minggu 1', 140, 'juni-w1'], 
-            ['Minggu 2', 135, 'juni-w2'], 
-            ['Minggu 3', 137, 'juni-w3'], 
+            ['Minggu 1', 140, 'juni-w1'],
+            ['Minggu 2', 135, 'juni-w2'],
+            ['Minggu 3', 137, 'juni-w3'],
             ['Minggu 4', 138, 'juni-w4']
-          ], 
-          color: '#ccfbf1' 
+          ],
+          color: '#ccfbf1'
         },
 
         // Level 3: Daily data for each week (example for Januari)
@@ -833,7 +837,7 @@
         { name: 'Januari - Minggu 2', id: 'januari-w2', data: [['Sen', 16], ['Sel', 15], ['Rab', 17], ['Kam', 16], ['Jum', 18], ['Sab', 14], ['Min', 14]], color: '#0f766e' },
         { name: 'Januari - Minggu 3', id: 'januari-w3', data: [['Sen', 15], ['Sel', 14], ['Rab', 16], ['Kam', 15], ['Jum', 17], ['Sab', 14], ['Min', 14]], color: '#0f766e' },
         { name: 'Januari - Minggu 4', id: 'januari-w4', data: [['Sen', 17], ['Sel', 16], ['Rab', 18], ['Kam', 16], ['Jum', 19], ['Sab', 15], ['Min', 14]], color: '#0f766e' },
-        
+
         // Daily data for Februari weeks
         { name: 'Februari - Minggu 1', id: 'februari-w1', data: [['Sen', 14], ['Sel', 13], ['Rab', 15], ['Kam', 14], ['Jum', 16], ['Sab', 12], ['Min', 11]], color: '#14b8a6' },
         { name: 'Februari - Minggu 2', id: 'februari-w2', data: [['Sen', 15], ['Sel', 14], ['Rab', 16], ['Kam', 15], ['Jum', 17], ['Sab', 12], ['Min', 11]], color: '#14b8a6' },
@@ -887,7 +891,7 @@
       ]
     };
 
-    // ========== CHART INITIALIZATION FUNCTIONS ==========
+    //  CHART INITIALIZATION FUNCTIONS
 
     function initCharts() {
       // Overview Charts (smaller)
@@ -897,8 +901,8 @@
         title: { text: null },
         yAxis: { ...commonConfig.yAxis, title: { text: null } },
         tooltip: { ...commonConfig.tooltip, pointFormat: 'Tiket: <b>{point.y}</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
           column: { pointPadding: 0.1, groupPadding: 0.15 },
           series: { ...commonConfig.plotOptions.series, dataLabels: { enabled: false } }
         },
@@ -912,8 +916,8 @@
         title: { text: null },
         yAxis: { ...commonConfig.yAxis, title: { text: null } },
         tooltip: { ...commonConfig.tooltip, pointFormat: 'Penumpang: <b>{point.y}</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
           bar: { pointPadding: 0.1, groupPadding: 0.15 },
           series: { ...commonConfig.plotOptions.series, dataLabels: { enabled: false } }
         },
@@ -956,8 +960,8 @@
         title: { text: null },
         yAxis: { ...commonConfig.yAxis, title: { text: null } },
         tooltip: { ...commonConfig.tooltip, pointFormat: '<b>Rp {point.y:,.0f}</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
           bar: { pointPadding: 0.1, groupPadding: 0.15 },
           series: { ...commonConfig.plotOptions.series, dataLabels: { enabled: false } }
         },
@@ -983,8 +987,8 @@
         xAxis: { ...commonConfig.xAxis, categories: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'] },
         yAxis: { ...commonConfig.yAxis, title: { text: null } },
         tooltip: { ...commonConfig.tooltip, pointFormat: 'Tiket: <b>{point.y}</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
           column: { pointPadding: 0.1, groupPadding: 0.15, color: '#0f766e' },
           series: { ...commonConfig.plotOptions.series, dataLabels: { enabled: false } }
         },
@@ -1086,8 +1090,8 @@
         title: { text: null },
         yAxis: { ...commonConfig.yAxis, title: { text: null }, max: 100, labels: { format: '{value}%' } },
         tooltip: { ...commonConfig.tooltip, pointFormat: 'Tingkat Hunian: <b>{point.y}%</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
           column: { pointPadding: 0.1, groupPadding: 0.15 },
           series: {
             ...commonConfig.plotOptions.series,
@@ -1139,10 +1143,10 @@
         xAxis: { ...commonConfig.xAxis, categories: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'] },
         yAxis: { ...commonConfig.yAxis, title: { text: null } },
         tooltip: { ...commonConfig.tooltip, pointFormat: 'Total Penumpang: <b>{point.y}</b>' },
-        plotOptions: { 
-          ...commonConfig.plotOptions, 
-          column: { 
-            pointPadding: 0.1, 
+        plotOptions: {
+          ...commonConfig.plotOptions,
+          column: {
+            pointPadding: 0.1,
             groupPadding: 0.15,
             zones: [
               { value: 300, color: '#ef4444' },
@@ -1184,4 +1188,4 @@
     });
   </script>
   @endpush
-</x-layouts.app>
+@endsection

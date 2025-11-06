@@ -165,7 +165,7 @@
 
         {{-- Cek apakah sedang menampilkan kapal atau operator --}}
         @if($view === 'kapal')
-        {{-- ===================== TABEL KAPAL ===================== --}}
+        {{--  TABEL KAPAL  --}}
         <table class="min-w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
             <thead class="bg-slate-50">
             <tr>
@@ -194,7 +194,7 @@
         </table>
 
         @elseif($view === 'operator')
-        {{-- ===================== TABEL OPERATOR ===================== --}}
+        {{--  TABEL OPERATOR  --}}
         <div class="overflow-x-auto bg-white border border-slate-200 rounded-lg shadow-sm">
         <table class="min-w-full text-sm text-slate-700">
             <thead class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider font-semibold border-b border-slate-200">
