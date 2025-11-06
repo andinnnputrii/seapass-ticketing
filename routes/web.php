@@ -7,9 +7,6 @@ use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\JadwalKapalController;
 use App\Http\Controllers\TiketValidasiController;
 use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\DashboardController;
-
-
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
