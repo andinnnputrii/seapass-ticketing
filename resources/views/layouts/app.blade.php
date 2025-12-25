@@ -28,38 +28,52 @@
   </script>
 
   <style>
-    #app-shell {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    .header-row {
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      transition: grid-template-columns 0.3s ease;
-    }
-
-    .content-row {
-      display: grid;
-      grid-template-columns: 260px minmax(0, 1fr);
-      flex: 1;
-      transition: grid-template-columns 0.3s ease;
-    }
-
-    #app-shell.is-collapsed .header-row,
-    #app-shell.is-collapsed .content-row {
-      grid-template-columns: 72px minmax(0, 1fr);
-    }
-
-    #app-shell .sidebar .label { display: inline; transition: opacity 0.2s ease; }
-    #app-shell.is-collapsed .sidebar .label,
-    #app-shell.is-collapsed .logo-text { display: none; }
-
     body {
       font-family: "Inter", sans-serif;
       font-size: 0.95rem;
       line-height: 1.5;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #app-shell {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header fixed di atas */
+    header {
+      height: 64px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    /* Container untuk sidebar dan konten */
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      height: calc(100vh - 64px);
+    }
+
+    /* Sidebar fixed */
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      transition: width 0.3s ease;
+    }
+
+    #app-shell.is-collapsed .sidebar {
+      width: 72px;
+    }
+
+    /* Main content area yang bisa scroll */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
       overflow-x: hidden;
     }
 
@@ -70,6 +84,17 @@
       box-sizing: border-box;
     }
 
+    /* Sidebar label animations */
+    #app-shell .sidebar .label {
+      display: inline;
+      transition: opacity 0.2s ease;
+    }
+
+    #app-shell.is-collapsed .sidebar .label {
+      display: none;
+    }
+
+    /* Custom scrollbar */
     .scrollbar-thin::-webkit-scrollbar {
       width: 6px;
     }
@@ -77,17 +102,20 @@
       background-color: #cbd5e1;
       border-radius: 10px;
     }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
   </style>
 
   <script src="https://unpkg.com/feather-icons"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 
-<body class="h-full bg-slate-50 text-slate-900 antialiased">
+<body class="bg-slate-50 text-slate-900 antialiased">
 <div id="app-shell">
 
-  {{-- Navbar - Update bagian header di layout --}}
-<header class="h-16 bg-brand-800 text-white px-4 lg:px-6 flex items-center justify-between shadow-md">
+  {{-- Navbar Fixed --}}
+  <header class="bg-brand-800 text-white px-4 lg:px-6 flex items-center justify-between shadow-md">
     <div class="flex items-center gap-4">
       <button id="sidebarToggle" class="p-2 rounded-md hover:bg-brand-700 transition-colors" aria-label="Toggle sidebar">
         <i data-feather="menu" class="w-5 h-5"></i>
@@ -115,8 +143,8 @@
     </div>
   </header>
 
-  {{-- Content --}}
-  <div class="content-row">
+  {{-- Content Wrapper --}}
+  <div class="content-wrapper">
     @php
       use Illuminate\Support\Str;
       $current = request()->route()->getName();
@@ -125,8 +153,7 @@
         ['label'=>'Kapal & Operator','icon'=>'anchor','route'=>route('kapal-operator.index'),'name'=>'kapal-operator.index'],
         ['label'=>'Jadwal Kapal','icon'=>'calendar','route'=>route('jadwal-kapal.index'),'name'=>'jadwal-kapal.index'],
         ['label'=>'Tiket & Validasi','icon'=>'file-text','route'=>route('tiket-validasi.index'),'name'=>'tiket-validasi.index'],
-        ['label'=>'Data Penumpang','icon'=>'users','route'=>'#','name'=>'penumpang'],
-        ['label'=>'Transaksi & Refund','icon'=>'credit-card','route'=>route('admin.transactions.index'),'name'=>'admin.transactions.index'],
+        ['label'=>'Data Penumpang','icon'=>'users','route'=>route('penumpang.index'),'name'=>'penumpang.index'],        ['label'=>'Transaksi & Refund','icon'=>'credit-card','route'=>route('admin.transactions.index'),'name'=>'admin.transactions.index'],
         ['label'=>'Laporan & Analitik','icon'=>'bar-chart-2','route'=>route('admin.reports.index'),'name'=>'admin.reports.index'],
         ['label'=>'Pengguna & Akses','icon'=>'shield','route'=>route('admin.users.index'),'name'=>'admin.users.index'],
         ['label'=>'Pengaduan','icon'=>'message-square','route'=>'#','name'=>'pengaduan'],
@@ -135,7 +162,7 @@
     @endphp
 
     {{-- Sidebar --}}
-    <aside class="sidebar bg-white border-r border-slate-200 overflow-y-auto scrollbar-thin">
+    <aside class="sidebar bg-white border-r border-slate-200 scrollbar-thin">
       <nav class="p-3">
         <ul class="space-y-1">
           @foreach($items as $item)
@@ -153,8 +180,8 @@
       </nav>
     </aside>
 
-    {{-- Main Content --}}
-    <div class="min-h-full flex flex-col bg-slate-50">
+    {{-- Main Content yang bisa scroll --}}
+    <div class="main-content bg-slate-50 scrollbar-thin">
       <main class="p-4 lg:p-6">
         @yield('content')
       </main>

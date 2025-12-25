@@ -1,4 +1,8 @@
-<x-layouts.app :title="'Detail Transaksi'">
+@extends('layouts.app')
+
+@section('title', 'Detail Transaksi')
+
+@section('content')
   <!-- Back Button & Breadcrumb -->
   <div class="mb-6">
     <a href="{{ route('admin.transactions.index') }}" class="inline-flex items-center text-teal-600 hover:text-teal-700 mb-4">
@@ -74,14 +78,14 @@
       </div>
 
       <!-- Schedule Info -->
-      @if($transaction->ticket && $transaction->ticket->schedule)
+      @if($transaction->tiket && $transaction->tiket->schedule)
         <div class="bg-white rounded-lg shadow">
           <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Informasi Jadwal</h2>
           </div>
           <div class="p-6 space-y-4">
             @php
-              $schedule = $transaction->ticket->schedule;
+              $schedule = $transaction->tiket->schedule;
             @endphp
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -120,7 +124,7 @@
               Download E-Ticket
             </button>
           @endif
-          
+
           <button onclick="window.print()" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
             <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
@@ -155,7 +159,7 @@
               <div class="pt-3 border-t space-y-2">
                 <form action="{{ route('admin.refunds.approve', $transaction->refund->id) }}" method="POST">
                   @csrf
-                  <button 
+                  <button
                     type="submit"
                     onclick="return confirm('Setujui refund ini?')"
                     class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
@@ -165,7 +169,7 @@
                 </form>
                 <form action="{{ route('admin.refunds.reject', $transaction->refund->id) }}" method="POST">
                   @csrf
-                  <button 
+                  <button
                     type="submit"
                     onclick="return confirm('Tolak refund ini?')"
                     class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
@@ -282,4 +286,5 @@
       {{ session('success') }}
     </div>
   @endif
-</x-layouts.app>
+    </div>
+@endsection

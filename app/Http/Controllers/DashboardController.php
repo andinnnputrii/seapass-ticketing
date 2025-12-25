@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // Get selected month (default: current month)
+        $selectedMonth = $request->input('month', date('n')); // 1-12
+        $selectedYear = $request->input('year', date('Y'));
+
         $stats = [
             'ticketsToday' => 1265,
             'passengersToday' => 1098,
@@ -20,16 +26,14 @@ class DashboardController extends Controller
             'trendRevenue' => -0.012,
         ];
 
-        // Data overview untuk chart (30 hari)
-        $chart = [
-            'labels' => range(1, 30),
-            'express' => [120,140,160,220,460,310,280,260,300,350,290,400,480,150,220,500,520,480,510,470,530,560,420,390,300,250,200,280,320,360],
-            'regular' => [90,80,150,100,130,200,240,210,220,230,250,260,270,300,310,330,290,310,320,340,300,280,260,250,240,230,220,210,200,190],
-        ];
+        // Data chart berdasarkan bulan yang dipilih
+        $chart = $this->getChartDataByMonth($selectedMonth, $selectedYear);
 
-        // Data drill-down: breakdown mingguan untuk setiap tanggal (30 titik)
-        // Format: setiap tanggal punya 4 minggu breakdown
-        $weeklyBreakdown = $this->generateWeeklyBreakdown($chart['express'], $chart['regular']);
+        // Weekly breakdown
+        $weeklyBreakdown = $this->generateWeeklyBreakdown(
+            $chart['express'],
+            $chart['regular']
+        );
 
         $schedule = [
             [
@@ -47,19 +51,8 @@ class DashboardController extends Controller
                 'depart' => '14:00 WIB','eta' => '16:00 WIB','status' => 'On-Time','status_color' => 'teal',
                 'note' => 'Kapal Siap'
             ],
-            [
-                'id' => 'J004','ship' => 'KM Jaya Kusuma','from' => 'Surabaya','to' => 'Makassar',
-                'depart' => '20:00 WIB','eta' => '12:00 WITA','status' => 'On-Time','status_color' => 'teal',
-                'note' => 'Kapal Siap'
-            ],
-            [
-                'id' => 'J005','ship' => 'KM Jaya Kusuma','from' => 'Padangbai','to' => 'Lembar',
-                'depart' => '06:00 WITA','eta' => '08:00 WITA','status' => 'On-Time','status_color' => 'teal',
-                'note' => 'Kapal Siap'
-            ],
         ];
 
-        // Menu items dipakai oleh layout
         $menuItems = [
             ['label'=>'Dashboard','icon'=>'grid','route'=>route('dashboard')],
             ['label'=>'Kapal & Operator','icon'=>'anchor','route'=>'#'],
@@ -77,12 +70,105 @@ class DashboardController extends Controller
     }
 
     /**
-     * Generate weekly breakdown data untuk drill-down
-     * Setiap hari dipecah menjadi 4 periode (pagi, siang, sore, malam)
-     *
-     * @param array $expressData
-     * @param array $regularData
-     * @return array
+     * Get chart data berdasarkan bulan yang dipilih
+     */
+    private function getChartDataByMonth($month, $year)
+    {
+        // Hitung jumlah hari dalam bulan tersebut
+        $daysInMonth = Carbon::create($year, $month, 1)->daysInMonth;
+
+        $labels = [];
+        $expressData = [];
+        $regularData = [];
+
+        // Cek apakah tabel ada dan ada data
+        try {
+            for ($day = 1; $day <= $daysInMonth; $day++) {
+                $date = Carbon::create($year, $month, $day);
+                $labels[] = $day;
+
+                // Query Express
+                $express = DB::table('kendiarans')
+                    ->join('transactions', 'kendiarans.transaksi_id', '=', 'transactions.id')
+                    ->whereYear('transactions.created_at', $year)
+                    ->whereMonth('transactions.created_at', $month)
+                    ->whereDay('transactions.created_at', $day)
+                    ->where('transactions.payment_status', 'paid')
+                    ->where('kendiarans.jenis_kendaraan', 'Express')
+                    ->sum('kendiarans.jumlah');
+
+                // Query Regular
+                $regular = DB::table('kendiarans')
+                    ->join('transactions', 'kendiarans.transaksi_id', '=', 'transactions.id')
+                    ->whereYear('transactions.created_at', $year)
+                    ->whereMonth('transactions.created_at', $month)
+                    ->whereDay('transactions.created_at', $day)
+                    ->where('transactions.payment_status', 'paid')
+                    ->where('kendiarans.jenis_kendaraan', 'Regular')
+                    ->sum('kendiarans.jumlah');
+
+                $expressData[] = (int) $express;
+                $regularData[] = (int) $regular;
+            }
+
+            // Jika semua data kosong, gunakan dummy
+            if (array_sum($expressData) == 0 && array_sum($regularData) == 0) {
+                throw new \Exception('No data');
+            }
+
+        } catch (\Exception $e) {
+            // Fallback ke data dummy berdasarkan bulan
+            $dummyData = $this->getDummyDataByMonth($month, $daysInMonth);
+            return $dummyData;
+        }
+
+        return [
+            'labels' => $labels,
+            'express' => $expressData,
+            'regular' => $regularData,
+        ];
+    }
+
+    /**
+     * Generate dummy data berdasarkan bulan
+     */
+    private function getDummyDataByMonth($month, $daysInMonth)
+    {
+        $labels = range(1, $daysInMonth);
+        $expressData = [];
+        $regularData = [];
+
+        // Variasi data berdasarkan bulan
+        $monthMultiplier = [
+            5 => 1.2,  // Mei - high season
+            6 => 1.0,  // Juni
+            7 => 1.5,  // Juli - peak season
+            8 => 1.3,  // Agustus
+            9 => 0.9,  // September
+            10 => 0.8, // Oktober
+            11 => 1.1, // November
+            12 => 1.4, // Desember
+        ];
+
+        $multiplier = $monthMultiplier[$month] ?? 1.0;
+
+        for ($i = 0; $i < $daysInMonth; $i++) {
+            $baseExpress = rand(150, 550);
+            $baseRegular = rand(100, 350);
+
+            $expressData[] = round($baseExpress * $multiplier);
+            $regularData[] = round($baseRegular * $multiplier);
+        }
+
+        return [
+            'labels' => $labels,
+            'express' => $expressData,
+            'regular' => $regularData,
+        ];
+    }
+
+    /**
+     * Generate weekly breakdown
      */
     private function generateWeeklyBreakdown($expressData, $regularData)
     {
@@ -91,8 +177,6 @@ class DashboardController extends Controller
         foreach ($expressData as $index => $expressTotal) {
             $regularTotal = $regularData[$index] ?? 0;
 
-            // Distribusi data menjadi 4 periode dalam sehari
-            // Menggunakan variasi realistis: pagi (25%), siang (30%), sore (28%), malam (17%)
             $breakdown[$index] = [
                 'express' => [
                     round($expressTotal * 0.25 + rand(-10, 10)),
@@ -113,25 +197,34 @@ class DashboardController extends Controller
     }
 
     /**
-     * API endpoint untuk mendapatkan detail breakdown (opsional)
-     * Berguna jika ingin fetch data drill-down via AJAX
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * API endpoint untuk filter bulan via AJAX
      */
+    public function filterByMonth(Request $request)
+    {
+        $month = $request->input('month', date('n'));
+        $year = $request->input('year', date('Y'));
+
+        $chart = $this->getChartDataByMonth($month, $year);
+        $weeklyBreakdown = $this->generateWeeklyBreakdown($chart['express'], $chart['regular']);
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'labels' => $chart['labels'],
+                'datasets' => [
+                    'express' => $chart['express'],
+                    'regular' => $chart['regular'],
+                ],
+                'weeklyBreakdown' => $weeklyBreakdown
+            ]
+        ]);
+    }
+
     public function getBreakdownDetail(Request $request)
     {
         $dayIndex = $request->input('day_index');
 
-        // Dalam implementasi real, query dari database
-        // Contoh: SELECT * FROM ticket_sales WHERE day = $dayIndex GROUP BY time_period
-
-        $chart = [
-            'labels' => range(1, 30),
-            'express' => [120,140,160,220,460,310,280,260,300,350,290,400,480,150,220,500,520,480,510,470,530,560,420,390,300,250,200,280,320,360],
-            'regular' => [90,80,150,100,130,200,240,210,220,230,250,260,270,300,310,330,290,310,320,340,300,280,260,250,240,230,220,210,200,190],
-        ];
-
+        $chart = $this->getChartDataByMonth(date('n'), date('Y'));
         $weeklyBreakdown = $this->generateWeeklyBreakdown($chart['express'], $chart['regular']);
 
         if (isset($weeklyBreakdown[$dayIndex])) {

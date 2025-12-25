@@ -194,27 +194,28 @@ class UserManagementController extends Controller
     }
 
     // Delete user
-    public function destroy($type, $id)
-    {
-        if ($type === 'internal') {
-            $user = Admin::findOrFail($id);
-        } else {
-            $user = User::findOrFail($id);
-        }
-
-        $name = $user->name;
-        $user->delete();
-
-        ActivityLog::create([
-            'user_type' => 'admin',
-            'user_id' => session('admin_id'),
-            'action' => 'delete',
-            'module' => 'users',
-            'description' => "Deleted user: {$name}",
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
-
-        return redirect()->back()->with('success', 'User berhasil dihapus');
+    public function destroy(Request $request, $type, $id)
+{
+    if ($type === 'internal') {
+        $user = Admin::findOrFail($id);
+    } else {
+        $user = User::findOrFail($id);
     }
+
+    $name = $user->name;
+    $user->delete();
+
+    ActivityLog::create([
+        'user_type'   => 'admin',
+        'user_id'     => session('admin_id'),
+        'action'      => 'delete',
+        'module'      => 'users',
+        'description' => "Deleted user: {$name}",
+        'ip_address'  => $request->ip(),
+        'user_agent'  => $request->userAgent(),
+    ]);
+
+    return redirect()->back()->with('success', 'User berhasil dihapus');
+}
+
 }

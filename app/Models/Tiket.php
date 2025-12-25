@@ -13,10 +13,10 @@ class Tiket extends Model
     protected $table = 'tikets';
 
     protected $fillable = [
-        'tiket_id',
-        'penumpang_id',
+        // 'id', // Primary key otomatis (bigint), tidak perlu diisi manual di fillable
         'jadwal_id',
-        'kapal_id',
+        'penumpang_id',
+        'kapal_id', // Opsional jika data kapal diambil via jadwal, tapi boleh ada untuk redundansi
         'tipe_tiket',
         'kelas_tiket',
         'harga',
@@ -27,7 +27,6 @@ class Tiket extends Model
         'status_tiket',
         'kode_booking',
         'nomor_kursi',
-        'nomor_kendaraan',
         'waktu_pemesanan',
         'waktu_pembayaran',
         'waktu_validasi',
@@ -44,21 +43,35 @@ class Tiket extends Model
         'total_bayar' => 'decimal:2'
     ];
 
-    // Relasi ke Penumpang
+    // PERBAIKAN: Relasi ke Transaction (Inggris)
+    public function transaction()
+    {
+        // Transaction memiliki ticket_id yang mengarah ke id tiket ini
+        return $this->hasOne(Transaction::class, 'ticket_id', 'id');
+    }
+
+    // Relasi ke Penumpang (Indo)
     public function penumpang()
     {
-        return $this->belongsTo(Penumpang::class, 'penumpang_id', 'penumpang_id');
+        return $this->belongsTo(
+        Penumpang::class,
+        'penumpang_id',   // FK di tabel tikets
+        'penumpang_id'    // PK di tabel penumpangs
+        );
     }
 
-    // Relasi ke Jadwal
+
+    // Relasi ke Jadwal (Indo)
     public function jadwal()
     {
-        return $this->belongsTo(Jadwal::class, 'jadwal_id', 'id');
+        // Asumsi primary key tabel jadwals adalah 'id_jadwal' atau 'id'
+        return $this->belongsTo(Jadwal::class, 'jadwal_id');
     }
 
-    // Relasi ke Kapal
+    // Relasi ke Kapal (Indo)
     public function kapal()
     {
+        // Asumsi primary key tabel kapals adalah 'kapal_id'
         return $this->belongsTo(Kapal::class, 'kapal_id', 'kapal_id');
     }
 
@@ -70,47 +83,19 @@ class Tiket extends Model
 
     public function kendaraan()
     {
-        return $this->hasOne(Kendaraan::class, 'tiket_id', 'tiket_id');
+        return $this->hasOne(Kendaraan::class, 'tiket_id', 'id');
     }
 
-    // Scope untuk filter status tiket
-    public function scopeValid($query)
-    {
-        return $query->where('status_tiket', 'Valid');
-    }
+    // --- SCOPES & ACCESSORS (TETAP SAMA SEPERTI KODE MU) ---
 
-    public function scopeTervalidasi($query)
-    {
-        return $query->where('status_tiket', 'Tervalidasi');
-    }
+    public function scopeValid($query) { return $query->where('status_tiket', 'Valid'); }
+    public function scopeTervalidasi($query) { return $query->where('status_tiket', 'Tervalidasi'); }
+    public function scopePending($query) { return $query->where('status_tiket', 'Pending'); }
+    public function scopeBatal($query) { return $query->where('status_tiket', 'Batal'); }
+    public function scopeReschedule($query) { return $query->where('status_tiket', 'Reschedule'); }
+    public function scopePenumpang($query) { return $query->where('tipe_tiket', 'Penumpang'); }
+    public function scopeKendaraan($query) { return $query->where('tipe_tiket', 'Kendaraan'); }
 
-    public function scopePending($query)
-    {
-        return $query->where('status_tiket', 'Pending');
-    }
-
-    public function scopeBatal($query)
-    {
-        return $query->where('status_tiket', 'Batal');
-    }
-
-    public function scopeReschedule($query)
-    {
-        return $query->where('status_tiket', 'Reschedule');
-    }
-
-    // Scope untuk filter tipe tiket
-    public function scopePenumpang($query)
-    {
-        return $query->where('tipe_tiket', 'Penumpang');
-    }
-
-    public function scopeKendaraan($query)
-    {
-        return $query->where('tipe_tiket', 'Kendaraan');
-    }
-
-    // Accessor untuk badge status
     public function getStatusBadgeAttribute()
     {
         $badges = [
@@ -123,7 +108,6 @@ class Tiket extends Model
         return $badges[$this->status_tiket] ?? 'secondary';
     }
 
-    // Accessor untuk badge pembayaran
     public function getStatusPembayaranBadgeAttribute()
     {
         $badges = [
@@ -134,14 +118,6 @@ class Tiket extends Model
         return $badges[$this->status_pembayaran] ?? 'secondary';
     }
 
-    // Accessor untuk format harga
-    public function getHargaFormattedAttribute()
-    {
-        return 'Rp ' . number_format($this->harga, 0, ',', '.');
-    }
-
-    public function getTotalBayarFormattedAttribute()
-    {
-        return 'Rp ' . number_format($this->total_bayar, 0, ',', '.');
-    }
+    public function getHargaFormattedAttribute() { return 'Rp ' . number_format($this->harga, 0, ',', '.'); }
+    public function getTotalBayarFormattedAttribute() { return 'Rp ' . number_format($this->total_bayar, 0, ',', '.'); }
 }

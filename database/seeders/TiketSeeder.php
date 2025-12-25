@@ -9,6 +9,7 @@ use App\Models\Tiket;
 use App\Models\Kendaraan;
 use App\Models\ValidasiTiket;
 use App\Models\Jadwal;
+use App\Models\Transaction; // Tambahkan ini
 use Carbon\Carbon;
 
 class TiketSeeder extends Seeder
@@ -20,6 +21,14 @@ class TiketSeeder extends Seeder
 
         if ($jadwals->count() == 0) {
             $this->command->warn('⚠️ Tidak ada data jadwal. Jalankan JadwalKapalSeeder terlebih dahulu.');
+            return;
+        }
+
+        // AMBIL DATA TRANSAKSI
+        // Kita perlu ini untuk mengisi kolom transaction_id
+        $transactionIds = Transaction::pluck('id')->toArray();
+        if (empty($transactionIds)) {
+            $this->command->warn('⚠️ Tidak ada data transaksi. Jalankan TransactionSeeder terlebih dahulu.');
             return;
         }
 
@@ -122,6 +131,11 @@ class TiketSeeder extends Seeder
 
                 $tiket = Tiket::create([
                     'tiket_id' => $tiketId,
+
+                    // PENAMBAHAN PENTING:
+                    // Pilih ID transaksi secara acak dari list transaksi yang ada
+                    'transaction_id' => $transactionIds[array_rand($transactionIds)],
+
                     'penumpang_id' => $penumpang->penumpang_id,
                     'jadwal_id' => $jadwal->id,
                     'kapal_id' => $jadwal->kapal_id,

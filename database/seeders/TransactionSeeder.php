@@ -13,11 +13,11 @@ class TransactionSeeder extends Seeder
     {
         // Nonaktifkan foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
+
         // Hapus data lama - URUTAN PENTING: child dulu, baru parent
         Refund::truncate();
         Transaction::truncate();
-        
+
         // Aktifkan kembali foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -26,7 +26,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX001',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Dimas Prasetyo',
                 'passenger_phone' => '081234567890',
                 'passenger_email' => 'dimas@example.com',
@@ -40,7 +39,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX002',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Andi Wijaya',
                 'passenger_phone' => '081234567891',
                 'passenger_email' => 'andi@example.com',
@@ -54,7 +52,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX003',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Rina Maharani',
                 'passenger_phone' => '081234567892',
                 'passenger_email' => 'rina@example.com',
@@ -68,7 +65,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX004',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Yuni Astuti',
                 'passenger_phone' => '081234567893',
                 'passenger_email' => 'yuni@example.com',
@@ -82,7 +78,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX005',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Husein Alazka',
                 'passenger_phone' => '081234567894',
                 'passenger_email' => 'husein@example.com',
@@ -96,7 +91,6 @@ class TransactionSeeder extends Seeder
             [
                 'order_number' => 'TRX006',
                 'user_id' => null,
-                'ticket_id' => null,
                 'passenger_name' => 'Budi Santoso',
                 'passenger_phone' => '081234567895',
                 'passenger_email' => 'budi@example.com',

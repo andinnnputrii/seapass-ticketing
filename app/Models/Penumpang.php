@@ -30,18 +30,48 @@ class Penumpang extends Model
         'tanggal_lahir' => 'date'
     ];
 
-    // Relasi ke Tiket
     public function tikets()
     {
         return $this->hasMany(Tiket::class, 'penumpang_id', 'penumpang_id');
     }
 
-    // Accessor
+    public function latestTiket()
+    {
+        return $this->hasOne(Tiket::class, 'penumpang_id', 'penumpang_id')
+            ->latest('created_at');
+    }
+
     public function getUmurAttribute()
     {
         if ($this->tanggal_lahir) {
             return $this->tanggal_lahir->age;
         }
         return null;
+    }
+
+    public function getJenisKelaminShortAttribute()
+    {
+        return $this->jenis_kelamin === 'Laki-laki' ? 'L' : 'P';
+    }
+
+    public function scopeJenisKelamin($query, $jenisKelamin)
+    {
+        if ($jenisKelamin) {
+            return $query->where('jenis_kelamin', $jenisKelamin);
+        }
+        return $query;
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            return $query->where(function($q) use ($search) {
+                $q->where('nama_lengkap', 'LIKE', "%{$search}%")
+                  ->orWhere('nik', 'LIKE', "%{$search}%")
+                  ->orWhere('no_telepon', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+        return $query;
     }
 }

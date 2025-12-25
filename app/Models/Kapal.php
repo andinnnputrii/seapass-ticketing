@@ -11,53 +11,41 @@ class Kapal extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'kapals';
+
+    // Primary Key
     protected $primaryKey = 'kapal_id';
     public $incrementing = false;
     protected $keyType = 'string';
-
     protected $fillable = [
         'kapal_id',
+        'operator_id',
         'nama_kapal',
         'jenis_kapal',
-        'operator_id',
-        'kapasitas',
-        'pelabuhan_asal',
-        'rute_aktif',
-        'tanggal_registrasi',
+        'kapasitas_penumpang',
+        'kapasitas_kendaraan',
         'status_operasional',
-        'status_kebersihan',
-        'foto_kapal',
-        'keterangan_tambahan',
-        'nomor_registrasi',
-        'tahun_pembuatan',
-        'panjang_kapal',
-        'lebar_kapal'
+        'deskripsi',
+        'foto_url'
     ];
 
-    protected $casts = [
-        'tanggal_registrasi' => 'date',
-        'tahun_pembuatan' => 'integer',
-        'panjang_kapal' => 'decimal:2',
-        'lebar_kapal' => 'decimal:2'
-    ];
-
-    // Relasi
-    public function operator()
-    {
-        return $this->belongsTo(Operator::class, 'operator_id', 'operator_id');
-    }
-
-    public function jadwals()
-    {
-        return $this->hasMany(Jadwal::class, 'kapal_id', 'kapal_id');
-    }
-
-    // Scope untuk kapal yang beroperasi
     public function scopeBeroperasi($query)
     {
         return $query->where('status_operasional', 'Beroperasi');
     }
 
+    // Relasi ke Operator
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class, 'operator_id', 'operator_id');
+    }
+
+    // Relasi ke Jadwal
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class, 'kapal_id', 'kapal_id');
+    }
+
+    // Relasi ke Tiket
     public function tikets()
     {
         return $this->hasMany(Tiket::class, 'kapal_id', 'kapal_id');

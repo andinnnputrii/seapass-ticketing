@@ -11,7 +11,7 @@
     <x-stat-card
       title="Tiket Terjual Hari Ini"
       :value="$stats['ticketsToday'] ?? 0"
-      suffix="/tiket"
+      suffix="tiket"
       note="3,5% • Update per pukul 14:00"
       noteColor="text-emerald-600"
       bg="bg-violet-100"

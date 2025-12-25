@@ -38,10 +38,10 @@
   const id = '{{ $id }}';
   const ctx = document.getElementById(id).getContext('2d');
 
-  let currentView = 'overview'; // 'overview' atau 'detail'
+  let currentView = 'overview';
   let selectedDay = null;
 
-  // Data overview (harian - total Express + Regular)
+  // Data overview (dari controller)
   const expressData = @json($datasets['express'] ?? []);
   const regularData = @json($datasets['regular'] ?? []);
 
@@ -65,9 +65,7 @@
     }]
   };
 
-  // Data detail (breakdown Express vs Regular per periode waktu)
   const detailLabels = ['Pagi (06-10)', 'Siang (10-14)', 'Sore (14-18)', 'Malam (18-22)'];
-
   const detailData = {
     labels: detailLabels,
     datasets: [
@@ -106,10 +104,8 @@
     ]
   };
 
-  // Data breakdown dari controller
-  const weeklyBreakdown = @json($weeklyBreakdown ?? []);
+  let weeklyBreakdown = @json($weeklyBreakdown ?? []);
 
-  // Plugin untuk glow effect
   const glowPlugin = {
     id: 'glowEffect',
     afterDraw(chart, args, options) {
@@ -162,7 +158,7 @@
           callbacks: {
             footer: (items) => {
               if (currentView === 'overview') {
-                return '\n Klik untuk detail per periode';
+                return '\n✨ Klik untuk detail per periode';
               }
               return '';
             }
@@ -203,24 +199,20 @@
     currentView = 'detail';
     selectedDay = index;
 
-    // Ambil data breakdown untuk hari yang diklik
     const breakdown = weeklyBreakdown[index];
 
     if (breakdown) {
       detailData.datasets[0].data = breakdown.express;
       detailData.datasets[1].data = breakdown.regular;
     } else {
-      // Fallback jika data tidak ada
       detailData.datasets[0].data = [0, 0, 0, 0];
       detailData.datasets[1].data = [0, 0, 0, 0];
     }
 
-    // Update chart dengan animasi
     chart.data = detailData;
     chart.options.animation.duration = 600;
     chart.update();
 
-    // Update UI
     document.getElementById('breadcrumb-' + id).classList.remove('hidden');
     document.getElementById('current-day-' + id).textContent = 'Hari ke-' + dayLabel;
     document.getElementById('helper-' + id).classList.add('hidden');
@@ -235,15 +227,79 @@
     chart.options.animation.duration = 600;
     chart.update();
 
-    // Update UI
     document.getElementById('breadcrumb-' + id).classList.add('hidden');
     document.getElementById('helper-' + id).classList.remove('hidden');
   }
 
-  // Event listener untuk tombol back
   document.getElementById('back-btn-' + id).addEventListener('click', backToOverview);
 
-  // Re-initialize Feather icons jika sudah di-load
+  // ===== FILTER BULAN (NEW) =====
+  const monthSelect = document.getElementById('month-select-' + id);
+
+  // Mapping bulan
+  const monthMap = {
+    'Mei': 5,
+    'Juni': 6,
+    'Juli': 7,
+    'Agustus': 8,
+    'September': 9,
+    'Oktober': 10,
+    'November': 11,
+    'Desember': 12
+  };
+
+  monthSelect.addEventListener('change', function() {
+    const selectedMonth = this.value;
+    const monthNumber = monthMap[selectedMonth];
+
+    // Show loading indicator
+    chart.options.plugins.title = {
+      display: true,
+      text: 'Memuat data...'
+    };
+    chart.update();
+
+    // Fetch data via AJAX
+    fetch(`/admin/dashboard/filter-month?month=${monthNumber}&year=2024`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Update chart data
+        overviewData.labels = data.data.labels;
+        overviewData.datasets[0].data = data.data.datasets.express.map((val, i) =>
+          val + (data.data.datasets.regular[i] || 0)
+        );
+
+        // Update weekly breakdown
+        weeklyBreakdown = data.data.weeklyBreakdown;
+
+        // Reset ke overview jika sedang di detail view
+        if (currentView === 'detail') {
+          backToOverview();
+        } else {
+          chart.data = overviewData;
+          chart.options.plugins.title = { display: false };
+          chart.update();
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+      chart.options.plugins.title = {
+        display: true,
+        text: 'Gagal memuat data'
+      };
+      chart.update();
+    });
+  });
+
+  // Re-initialize Feather icons
   if (typeof feather !== 'undefined') {
     feather.replace();
   }

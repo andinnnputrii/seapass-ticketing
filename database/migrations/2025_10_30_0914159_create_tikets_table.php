@@ -14,20 +14,14 @@ return new class extends Migration
 
             // Foreign Keys
             $table->string('penumpang_id');
-            $table->foreign('penumpang_id')
-                  ->references('penumpang_id')
-                  ->on('penumpangs')
-                  ->onDelete('cascade');
+            $table->foreign('penumpang_id')->references('penumpang_id')->on('penumpangs')->onDelete('cascade');
 
-            $table->foreignId('jadwal_id')
-                  ->constrained('jadwals')
-                  ->onDelete('cascade');
+            $table->foreignId('jadwal_id')->constrained('jadwals')->onDelete('cascade');
 
             $table->string('kapal_id');
-            $table->foreign('kapal_id')
-                  ->references('kapal_id')
-                  ->on('kapals')
-                  ->onDelete('cascade');
+            $table->foreign('kapal_id')->references('kapal_id') ->on('kapals')->onDelete('cascade');
+
+            $table->foreignId('transaction_id')->nullable()->constrained('transactions')->onDelete('cascade');
 
             // Data Tiket
             $table->enum('tipe_tiket', ['Kendaraan', 'Penumpang'])->default('Penumpang');
@@ -42,6 +36,7 @@ return new class extends Migration
             // Pembayaran
             $table->enum('metode_bayar', ['QRIS', 'Tunai', 'Bank', 'E-Wallet'])->nullable();
             $table->enum('status_pembayaran', ['Pending', 'Paid', 'Refund'])->default('Pending');
+
 
             // Status Tiket
             $table->enum('status_tiket', ['Valid', 'Tervalidasi', 'Batal', 'Reschedule', 'Pending'])->default('Valid');

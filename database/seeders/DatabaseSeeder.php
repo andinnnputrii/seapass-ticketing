@@ -14,8 +14,9 @@ class DatabaseSeeder extends Seeder
             OperatorSeeder::class,
             KapalSeeder::class,
             JadwalKapalSeeder::class,
-            TiketSeeder::class,
             TransactionSeeder::class,
+            TiketSeeder::class,
+
         ]);
 
         // Seeder sukses info

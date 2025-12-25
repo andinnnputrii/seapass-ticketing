@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('ticket_id')->nullable()->constrained('tickets')->onDelete('set null'); // ✅ NULLABLE
+            // $table->foreignId('ticket_id')->nullable()->constrained('tickets')->onDelete('set null'); // ✅ NULLABLE
             $table->string('passenger_name');
             $table->string('passenger_phone')->nullable();
             $table->string('passenger_email')->nullable();

@@ -12,7 +12,7 @@ class Transaction extends Model
     protected $fillable = [
         'order_number',
         'user_id',
-        'ticket_id',
+        'ticket_id', // Ini Foreign Key ke tabel 'tikets'
         'passenger_name',
         'passenger_phone',
         'passenger_email',
@@ -35,10 +35,13 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke Ticket
-    public function ticket()
+    // PERBAIKAN: Relasi ke Tiket (Bahasa Indo)
+    // Kita ubah nama fungsi jadi 'tiket' agar konsisten
+    public function tiket()
     {
-        return $this->belongsTo(Ticket::class);
+        // 'ticket_id' adalah kolom di tabel transactions
+        // 'id' adalah primary key di tabel tikets
+        return $this->belongsTo(Tiket::class, 'ticket_id', 'id');
     }
 
     // Relasi ke Refund

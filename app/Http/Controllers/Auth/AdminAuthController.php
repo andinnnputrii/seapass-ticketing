@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session; // ✅ TAMBAHKAN INI (Import Facade)
 use App\Models\Admin;
 
 class AdminAuthController extends Controller
@@ -22,9 +23,10 @@ class AdminAuthController extends Controller
      */
     public function showLogin()
     {
-        // Jika sudah login, redirect ke dashboard
-        if (session()->has('admin_id')) {
-            return redirect()->route('dashboard');
+        // Jika sudah login, redirect ke dashboard admin
+        // PERBAIKAN: Gunakan Facade Session::has() agar VS Code tidak error 'null object'
+        if (Session::has('admin_id')) {
+            return redirect()->route('admin.dashboard');
         }
 
         return view('auth.login');
@@ -43,30 +45,31 @@ class AdminAuthController extends Controller
             'password.required' => 'Password wajib diisi',
         ]);
 
-        // Cari admin berdasarkan username
+        // Cari admin berdasarkan username dan status active
         $admin = Admin::where('username', $request->username)
-                     ->where('status', 'active')
-                     ->first();
+                      ->where('status', 'active')
+                      ->first();
 
         // Cek password
         if ($admin && Hash::check($request->password, $admin->password)) {
             // Update last login
             $admin->update(['last_login' => now()]);
 
-            // Simpan session dengan KEY yang BENAR
-        session([
-            'admin_id' => $admin->id,              // ✅ TAMBAHKAN INI (yang dicek middleware)
-            'admin_username' => $admin->username,  // ✅ Tetap simpan untuk keperluan lain
-            'admin_name' => $admin->name,          // ✅ Untuk tampilan di navbar
-            'admin_email' => $admin->email,        // ✅ Optional
-        ]);
+            // Simpan session
+            session([
+                'admin_id' => $admin->id,          // Kunci utama untuk middleware
+                'admin_username' => $admin->username,
+                'admin_name' => $admin->name,      // Opsional: nama lengkap/role
+                'admin_role' => $admin->role ?? 'admin', // Opsional: jika ada role
+            ]);
 
             return redirect()->route('admin.dashboard');
         }
 
+        // Jika gagal
         return back()
             ->withInput($request->only('username'))
-            ->withErrors(['login' => 'Username atau password salah']);
+            ->withErrors(['login' => 'Username atau password salah / akun tidak aktif']);
     }
 
     /**
@@ -74,7 +77,10 @@ class AdminAuthController extends Controller
      */
     public function logout(Request $request)
     {
+        // Hapus semua session
         $request->session()->flush();
+
+        // Redirect ke halaman login
         return redirect()->route('login')->with('success', 'Berhasil logout');
     }
 }
